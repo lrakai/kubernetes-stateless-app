@@ -1,0 +1,1 @@
+Remove-AzureRmResourceGroup -Force -Name k8s-lab
