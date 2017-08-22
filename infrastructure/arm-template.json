@@ -99,15 +99,15 @@
                 },
                 "storageProfile": {
                     "imageReference": {
-                        "publisher": "MicrosoftWindowsServer",
-                        "offer": "WindowsServer",
-                        "sku": "2016-Datacenter",
+                        "publisher": "OpenLogic",
+                        "offer": "CentOS",
+                        "sku": "7.3",
                         "version": "latest"
                     },
                     "osDisk": {
                         "createOption": "fromImage",
                         "vhd": {
-                            "uri": "[concat(concat(reference(resourceId('Microsoft.Storage/storageAccounts', replace(concat(parameters('storageAccountName'), resourceGroup().name),'-', '')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170610002357.vhd')]"
+                            "uri": "[concat(concat(reference(resourceId('Microsoft.Storage/storageAccounts', replace(concat(parameters('storageAccountName'), resourceGroup().name),'-', '')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170822004926.vhd')]"
                         },
                         "name": "[parameters('virtualMachineName')]"
                     },
@@ -173,15 +173,15 @@
                 },
                 "storageProfile": {
                     "imageReference": {
-                        "publisher": "MicrosoftWindowsServer",
-                        "offer": "WindowsServer",
-                        "sku": "2016-Datacenter",
+                        "publisher": "OpenLogic",
+                        "offer": "CentOS",
+                        "sku": "7.3",
                         "version": "latest"
                     },
                     "osDisk": {
                         "createOption": "fromImage",
                         "vhd": {
-                            "uri": "[concat(concat(reference(resourceId('Microsoft.Storage/storageAccounts', replace(concat(parameters('storageAccountName'), resourceGroup().name),'-', '')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('nodeVirtualMachineName'), '20170610002357.vhd')]"
+                            "uri": "[concat(concat(reference(resourceId('Microsoft.Storage/storageAccounts', replace(concat(parameters('storageAccountName'), resourceGroup().name),'-', '')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), parameters('virtualMachineName'), '20170822004926.vhd')]"
                         },
                         "name": "[parameters('nodeVirtualMachineName')]"
                     },
@@ -304,7 +304,7 @@
                                 "id": "[variables('subnetRef')]"
                             },
                             "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "10.0.0.200",
+                            "privateIPAddress": "10.0.0.10",
                             "publicIpAddress": {
                                 "id": "[resourceId(resourceGroup().name,'Microsoft.Network/publicIpAddresses', parameters('nodePublicIpAddressName'))]"
                             }
@@ -341,6 +341,71 @@
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
+                    {
+                        "name": "allow-kube-node-ports",
+                        "properties": {
+                            "priority": 500,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "TCP",
+                            "destinationPortRange": "30000-32767",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
+                    {
+                        "name": "allow-kube-controllers",
+                        "properties": {
+                            "priority": 600,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "TCP",
+                            "destinationPortRange": "10250-10255",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
+                    {
+                        "name": "allow-kube-api-server",
+                        "properties": {
+                            "priority": 700,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "TCP",
+                            "destinationPortRange": "6443",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
+                    {
+                        "name": "allow-etcd",
+                        "properties": {
+                            "priority": 800,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "TCP",
+                            "destinationPortRange": "2379-2380",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
+                    {
+                        "name": "allow-dashboard",
+                        "properties": {
+                            "priority": 900,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "TCP",
+                            "destinationPortRange": "8001",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
                     {
                         "name": "default-allow-ssh",
                         "properties": {
