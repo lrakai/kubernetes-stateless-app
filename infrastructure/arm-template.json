@@ -89,10 +89,7 @@
                 "osProfile": {
                     "computerName": "[parameters('virtualMachineName')]",
                     "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]",
-                    "windowsConfiguration": {
-                        "provisionVmAgent": "true"
-                    }
+                    "adminPassword": "[parameters('adminPassword')]"
                 },
                 "hardwareProfile": {
                     "vmSize": "[parameters('virtualMachineSize')]"
@@ -120,35 +117,7 @@
                         }
                     ]
                 }
-            },
-            "resources": [
-                {
-                    "apiVersion": "2015-06-15",
-                    "type": "extensions",
-                    "name": "provision",
-                    "location": "[resourceGroup().location]",
-                    "dependsOn": [
-                        "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName'))]"
-                    ],
-                    "tags": {
-                        "displayName": "provision-vm"
-                    },
-                    "properties": {
-                        "publisher": "Microsoft.Compute",
-                        "type": "CustomScriptExtension",
-                        "typeHandlerVersion": "1.4",
-                        "autoUpgradeMinorVersion": true,
-                        "settings": {
-                            "fileUris": [
-                                "https://raw.githubusercontent.com/lrakai/powershell-dsc-windows/master/post-deploy/bootstrap.ps1"
-                            ]
-                        },
-                        "protectedSettings": {
-                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File bootstrap.ps1 -user ',parameters('adminUsername'),' -password ',parameters('adminPassword'))]"
-                        }
-                    }
-                }
-            ]
+            }
         },
         {
             "name": "[parameters('nodeVirtualMachineName')]",
@@ -163,10 +132,7 @@
                 "osProfile": {
                     "computerName": "[parameters('nodeVirtualMachineName')]",
                     "adminUsername": "[parameters('adminUsername')]",
-                    "adminPassword": "[parameters('adminPassword')]",
-                    "windowsConfiguration": {
-                        "provisionVmAgent": "true"
-                    }
+                    "adminPassword": "[parameters('adminPassword')]"
                 },
                 "hardwareProfile": {
                     "vmSize": "[parameters('virtualMachineSize')]"
@@ -212,13 +178,8 @@
                         "type": "CustomScriptExtension",
                         "typeHandlerVersion": "1.4",
                         "autoUpgradeMinorVersion": true,
-                        "settings": {
-                            "fileUris": [
-                                "https://raw.githubusercontent.com/lrakai/powershell-dsc-windows/master/post-deploy/bootstrap.ps1"
-                            ]
-                        },
                         "protectedSettings": {
-                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File bootstrap.ps1 -user ',parameters('adminUsername'),' -password ',parameters('adminPassword'))]"
+                            "commandToExecute": "yum install -y kubernetes"
                         }
                     }
                 }
