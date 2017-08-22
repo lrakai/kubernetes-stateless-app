@@ -179,7 +179,7 @@
                         "typeHandlerVersion": "1.4",
                         "autoUpgradeMinorVersion": true,
                         "protectedSettings": {
-                            "commandToExecute": "yum install -y kubernetes"
+                            "commandToExecute": "python /bin/yum install -y kubernetes"
                         }
                     }
                 }
