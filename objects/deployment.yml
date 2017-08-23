@@ -1,0 +1,20 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: game-deployment
+spec:
+  # tells deployment to run 1 pods matching the template
+  replicas: 1
+  # create pods using the pod definition in this template
+  template: 
+    metadata:
+      # name is automatically generated based on the deployment.name
+      labels:
+        app: game
+    spec:
+      containers:
+      - name: tetris
+        image: uzyexe/tetris:latest
+        ports:
+        - containerPort: 80
