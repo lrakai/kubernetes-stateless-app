@@ -1,10 +1,11 @@
-apiVersion: 1
+---
+apiVersion: v1
 kind: Node
 metadata:
-  name: worker-node
+  name: k8s-node
   labels:
     # Use labels to organize nodes
     environment: dev
-  spec:
-    # Fully qualified domain name to reach the node (metadata.name by default)
-    externalID: k8s-node
+spec:
+  # Fully qualified domain name to reach the node (metadata.name by default)
+  externalID: k8s-node
