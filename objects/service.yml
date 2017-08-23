@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: game
+  labels:
+    app: game
+spec:
+  selector:
+    # Use labels to select the pods to route traffic to
+    app: game
+  ports:
+  - protocol: TCP
+    port: 80
+  # Allocate a port on each node in the cluster
+  type: NodePort
