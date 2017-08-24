@@ -160,34 +160,32 @@
                         }
                     ]
                 }
-            }
-        },
-        {
-            "name": "[concat(parameters('nodeVirtualMachineName'), '-custom-script-linux')]",
-            "apiVersion": "2015-01-01",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "incremental",
-                "templateLink": {
-                    "uri": "https://gallery.azure.com/artifact/20161101/microsoft.custom-script-linux-arm.2.0.50/Artifacts/MainTemplate.json"
-                },
-                "parameters": {
-                    "vmName": {
-                        "value": "[parameters('nodeVirtualMachineName')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-06-15",
+                    "type": "extensions",
+                    "name": "provision",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('nodeVirtualMachineName'))]"
+                    ],
+                    "tags": {
+                        "displayName": "provision-vm"
                     },
-                    "location": {
-                        "value": "westus2"
-                    },
-                    "fileUris": {
-                        "value": []
-                    },
-                    "commandToExecute": {
-                        "value": "python /bin/yum install -y kubernetes"
+                    "properties": {
+                        "publisher": "Microsoft.OSTCExtensions",
+                        "type": "CustomScriptForLinux",
+                        "typeHandlerVersion": "1.4",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": []
+                        },
+                        "protectedSettings": {
+                            "commandToExecute": "python /bin/yum install -y kubernetes"
+                        }
                     }
                 }
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('nodeVirtualMachineName'))]"
             ]
         },
         {
