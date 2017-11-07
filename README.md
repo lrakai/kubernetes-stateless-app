@@ -21,6 +21,11 @@ Alternatively, you can perform a one-click deploy with the following button:
 </a>
 
 ## Following Along
+SSH into the master virtual machine:
+
+user: student
+password: 1Lab_Virtual_Machine!
+
 Install kubernetes on the nodes and deploy the resources in the `objects/` directory using `kubectl` on the master.
 
 ## Tearing Down
